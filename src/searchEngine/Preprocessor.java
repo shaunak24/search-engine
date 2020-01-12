@@ -10,21 +10,21 @@ public class Preprocessor {
 	public HashMap<String, Attribute> objectMap = new HashMap<String, Attribute>();
 	public List<String> attributeNames;
 
-	public DatabasePreprocessing(HashMap<String, SearchEngineInterface> map, List<String> attributeNames) {
+	public Preprocessor(HashMap<String, Adapter> map, List<String> attributeNames) {
 		this.attributeNames = attributeNames;
 		buildObjectMap(map);
 	}
 
-	public void buildObjectMap(HashMap<String, SearchEngineInterface> map) {
+	public void buildObjectMap(HashMap<String, Adapter> map) {
 
 		for (String name : attributeNames) {
-			List<SearchEngineInterface> list = new ArrayList();
+			List<Adapter> list = new ArrayList();
 
-			for (SearchEngineInterface record : map.values()) {
+			for (Adapter record : map.values()) {
 				list.add(record);
 			}
-			objectMap.put(name, new Attribute(name, list, attributeNames.get(0)));
-			objectMap.put("~" + name, new Attribute("~" + name, list, attributeNames.get(0)));
+			objectMap.put(name, new Attribute(name, list));
+			objectMap.put("~" + name, new Attribute("~" + name, list));
 		}
 	}
 
