@@ -10,7 +10,7 @@ public class Preprocessor {
 	public HashMap<String, Attribute> objectMap = new HashMap<String, Attribute>();
 	public List<String> attributeNames;
 
-	public DatabasePreprocessing(HashMap<String, SearchEngineInterface> map, List<String> attributeNames) {
+	public Preprocessor(HashMap<String, SearchEngineInterface> map, List<String> attributeNames) {
 		this.attributeNames = attributeNames;
 		buildObjectMap(map);
 	}
