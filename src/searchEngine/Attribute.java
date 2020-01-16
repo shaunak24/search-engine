@@ -52,7 +52,7 @@ public class Attribute {
 		HashSet<String> uniqueSet = new HashSet<String>();
 
 		for (Adapter record : list) {
-			String attributeValue = record.getValue(attributeName);
+			String attributeValue = record.getValue(attributeName.substring(1));
 			if (!uniqueSet.contains(attributeValue)) {
 				uniqueSet.add(attributeValue);
 				attributeMap.put(attributeValue, new LinkedList<String>());
@@ -64,8 +64,8 @@ public class Attribute {
 		while (uniqueSetIterator.hasNext()) {
 			String attributeValue = (String) uniqueSetIterator.next();
 			for (Adapter record : list) {
-				if (!attributeValue.equals(record.getValue(attributeName))) {
-					attributeMap.get(attributeValue).add(record.getValue(attributeName));
+				if (!attributeValue.equals(record.getValue("id"))) {
+					attributeMap.get(attributeValue).add(record.getValue("id"));
 				}
 			}
 		}
@@ -78,10 +78,10 @@ public class Attribute {
 			String positiveValue = record.getValue(attributeName);
 
 			if (attributeMap.containsKey(positiveValue)) {
-				attributeMap.get(positiveValue).add(record.getValue(attributeName));
+				attributeMap.get(positiveValue).add(record.getValue("id"));
 			} else {
 				LinkedList<String> linkedList = new LinkedList<>();
-				linkedList.add(record.getValue(attributeName));
+				linkedList.add(record.getValue("id"));
 				attributeMap.put(positiveValue, linkedList);
 			}
 		}

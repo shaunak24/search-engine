@@ -10,12 +10,12 @@ public class Preprocessor {
 	public HashMap<String, Attribute> objectMap = new HashMap<String, Attribute>();
 	public List<String> attributeNames;
 
-	public Preprocessor(HashMap<String, Adapter> map, List<String> attributeNames) {
+	public Preprocessor(Map<String, Adapter> map, List<String> attributeNames) {
 		this.attributeNames = attributeNames;
 		buildObjectMap(map);
 	}
 
-	public void buildObjectMap(HashMap<String, Adapter> map) {
+	public void buildObjectMap(Map<String, Adapter> map) {
 
 		for (String name : attributeNames) {
 			List<Adapter> list = new ArrayList();
