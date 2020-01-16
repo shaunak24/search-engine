@@ -64,7 +64,7 @@ public class Attribute {
 		while (uniqueSetIterator.hasNext()) {
 			String attributeValue = (String) uniqueSetIterator.next();
 			for (Adapter record : list) {
-				if (!attributeValue.equals(record.getValue("id"))) {
+				if (!attributeValue.equals(record.getValue(attributeName.substring(1)))) {
 					attributeMap.get(attributeValue).add(record.getValue("id"));
 				}
 			}

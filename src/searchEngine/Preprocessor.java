@@ -10,11 +10,8 @@ public class Preprocessor {
 	public HashMap<String, Attribute> objectMap = new HashMap<String, Attribute>();
 	public List<String> attributeNames;
 
-<<<<<<< HEAD
-	public Preprocessor(HashMap<String, SearchEngineInterface> map, List<String> attributeNames) {
-=======
-	public Preprocessor(HashMap<String, SearchEngineInterface> map, List<String> attributeNames) {
->>>>>>> 58714085f95928b79c9c6e4a553ebbe1eb2aa3b7
+	public Preprocessor(Map<String, Adapter> map, List<String> attributeNames) {
+
 		this.attributeNames = attributeNames;
 		buildObjectMap(map);
 	}
@@ -26,7 +23,8 @@ public class Preprocessor {
 
 			for (Adapter record : map.values()) {
 				list.add(record);
-			}
+            }
+            
 			objectMap.put(name, new Attribute(name, list));
 			objectMap.put("~" + name, new Attribute("~" + name, list));
 		}
