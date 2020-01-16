@@ -95,5 +95,10 @@ public class Attribute {
 	public HashMap<String, LinkedList<String>> getAttributeMap() {
 
 		return attributeMap;
-	}
+    }
+    
+    public TreeNode getNodeRef() {
+
+        return nodeRef;
+    }
 }
