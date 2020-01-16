@@ -47,4 +47,8 @@ public class Preprocessor {
 	public List<String> getAttributeNames() {
 		return attributeNames;
 	}
+	
+	public Map<String, Adapter> getDataMap() {
+		return dataMap;
+	}
 }

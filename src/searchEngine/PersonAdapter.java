@@ -26,4 +26,11 @@ public class PersonAdapter implements Adapter {
 		}
 		return null;
 	}
+	
+	@Override
+	public String toString() {
+		
+		return "id : " + person.getId() + " name : " + person.getName() + 
+				" address : " + person.getAddress() + " emailId : " + person.getEmailId();
+	}
 }
