@@ -6,14 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 public class Preprocessor {
-	
-	public HashMap<String, Attribute> objectMap = new HashMap<String, Attribute>();
-	public List<String> attributeNames;
+    
+    private Map<String, Adapter> dataMap = new HashMap<String, Adapter>();
+	private Map<String, Attribute> objectMap = new HashMap<String, Attribute>();
+	private List<String> attributeNames;
 
-	public Preprocessor(Map<String, Adapter> map, List<String> attributeNames) {
+	public Preprocessor(List objectList, List<String> attributeNames) {
 
-		this.attributeNames = attributeNames;
-		buildObjectMap(map);
+        this.attributeNames = attributeNames;
+        adapt(objectList);
+		buildObjectMap(dataMap);
 	}
 
 	public void buildObjectMap(Map<String, Adapter> map) {
@@ -28,7 +30,15 @@ public class Preprocessor {
 			objectMap.put(name, new Attribute(name, list));
 			objectMap.put("~" + name, new Attribute("~" + name, list));
 		}
-	}
+    }
+    
+    public void adapt(List objectList) {
+
+		for (Object object : objectList) {
+			Adapter adapter = AdapterFactory.getInstance("person", object);
+			dataMap.put(adapter.getValue("id"), adapter);
+		}
+    }
 
 	public Map<String, Attribute> getObjectMap() {
 		return objectMap;
