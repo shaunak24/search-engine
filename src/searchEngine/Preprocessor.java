@@ -19,7 +19,7 @@ public class Preprocessor {
 	public void buildObjectMap(Map<String, Adapter> map) {
 
 		for (String name : attributeNames) {
-			List<Adapter> list = new ArrayList();
+			List<Adapter> list = new ArrayList<>();
 
 			for (Adapter record : map.values()) {
 				list.add(record);

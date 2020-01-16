@@ -29,14 +29,15 @@ public class searchEngine {
 		//System.out.println(fieldList);
 		//System.out.println(dataMap);
 		
-		Preprocessor preprocessor = new Preprocessor(dataMap, fieldList);
+        Preprocessor preprocessor = new Preprocessor(dataMap, fieldList);
+        Map<String, Attribute> attributeObjectMap = preprocessor.getObjectMap();
 		
-		for (Map.Entry entry : preprocessor.getObjectMap().entrySet()) {
-			System.out.println(entry.getKey());
-			Attribute attribute = (Attribute) entry.getValue();
-            //System.out.println(attribute.getAttributeMap());
-            printInorder(attribute.getNodeRef());
-		}
+		// for (Map.Entry entry : preprocessor.getObjectMap().entrySet()) {
+		// 	System.out.println(entry.getKey());
+		// 	Attribute attribute = (Attribute) entry.getValue();
+        //     System.out.println(attribute.getAttributeMap());
+        //     printInorder(attribute.getNodeRef());
+		// }
     }
 }
     
