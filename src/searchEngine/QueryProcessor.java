@@ -122,7 +122,6 @@ public class QueryProcessor {
 				rootNode = rootNode.left;
 			}
 		}
-		System.out.println("Dfsgfdghdgh" + tempResultSet);
 		return tempResultSet;
 	}
 
@@ -144,9 +143,7 @@ public class QueryProcessor {
 	}
 
 	public HashSet<String> equalOperation(String attribute, String value, HashSet<String> resultSet) {
-		System.out.println("-" + attribute + "-" + value + "-");
 		LinkedList<String> valueList = (LinkedList) attributeMap.get(attribute).getAttributeMap().get(value);
-		System.out.println(attribute + "-" + valueList);
 		Iterator recordIterator = valueList.iterator();
 		HashSet<String> tempResultSet = new HashSet<String>();
 

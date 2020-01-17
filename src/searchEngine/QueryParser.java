@@ -23,25 +23,22 @@ public class QueryParser {
 		query = simplifyQuery(query);
 
 		while (query.indexOf("(") != -1) {
-			HashSet<String> resultSet = new HashSet<String>();
-			System.out.println(query);
+			HashSet<String> result = new HashSet<String>();
 			subQuery = getSubQuery(query);
 			queue = processQuery(subQuery);
-			resultSet.addAll(queryProcessor.getResults(queue));
-			queryMap.put("#query" + queryNumber, resultSet);
+			result.addAll(queryProcessor.getResults(queue));
+			queryMap.put("#query" + queryNumber, result);
 			query = query.replace("(" + subQuery + ")", "#query" + queryNumber++);
-			System.out.println(resultSet + "----" + queryMap);
 		}
 
-		System.out.println(query);
-		HashSet<String> resultSet = new HashSet<String>();
+		HashSet<String> result = new HashSet<String>();
 		queue = processQuery(query);
-		resultSet.addAll(queryProcessor.getResults(queue));
-		queryMap.put("#query" + queryNumber, resultSet);
+		result.addAll(queryProcessor.getResults(queue));
+		queryMap.put("#query" + queryNumber, result);
 		query = query.replace("(" + subQuery + ")", "#query" + queryNumber++);
-		System.out.println("Final result Set" + resultSet);
+		System.out.println("Final result Set" + result);
 
-		return resultSet; 
+		return result; 
 	}
 
 	private String simplifyQuery(String query) {
@@ -88,12 +85,12 @@ public class QueryParser {
 
 	private ArrayList<HashMap<String, Object>> processQuery(String query) {
 
-		ArrayList<HashMap<String, Object>> queue = new ArrayList<>();// for some reason can't instantiate queue
+		ArrayList<HashMap<String, Object>> queue = new ArrayList<>();
 		String[] operations = query.split(" or ");
 
 		for (String operation : operations) {
 			String[] subOperations = operation.split(" and ");
-			HashMap<String, Object> operationMap = new HashMap();
+			HashMap<String, Object> operationMap = new HashMap<>();
 
 			for (String subOperation : subOperations) {
 				subOperation = subOperation.trim();
@@ -164,7 +161,6 @@ public class QueryParser {
 				break;
 			}
 		}
-
 		return query.substring(startIndex + 1, endIndex);
 	}
 }

@@ -12,7 +12,7 @@ import java.util.Map;
 public class Attribute {
 
 	private String attributeName;
-	private HashMap<String, LinkedList<String>> attributeMap = new HashMap<String, LinkedList<String>>();
+	private Map<String, LinkedList<String>> attributeMap = new HashMap<String, LinkedList<String>>();
 	private TreeNode nodeRef;
 
 	public Attribute(String attributeName, List<Adapter> list) {
@@ -92,7 +92,7 @@ public class Attribute {
 		return attributeName;
 	}
 
-	public HashMap<String, LinkedList<String>> getAttributeMap() {
+	public Map<String, LinkedList<String>> getAttributeMap() {
 
 		return attributeMap;
     }

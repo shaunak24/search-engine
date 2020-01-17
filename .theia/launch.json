@@ -1,0 +1,27 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  "version": "0.2.0",
+  "configurations": [
+   {
+      "type": "java",
+      "name": "CodeLens (Launch) - SearchEngine",
+      "request": "launch",
+      "mainClass": "searchEngine.SearchEngine",
+      "projectName": "searchEngine"
+   },
+   {
+      "type": "java",
+      "name": "CodeLens (Launch) - searchEngine",
+      "request": "launch",
+      "mainClass": "searchEngine.searchEngine",
+      "projectName": "searchEngine"
+   },
+   {
+      "type": "java",
+      "name": "Debug (Launch) - Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+   }
+]
+}
