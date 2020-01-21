@@ -118,12 +118,6 @@ public class QueryParser {
 					} else if ("<".equals(operator)) {
 						operationMap.put("~" + attribute, getNode(attribute, value, false));
 					}
-//					else if (">=".equals(operator)) {
-//						operationMap.put(attribute, getNode(attribute, value, true));
-//					} 
-//					else if ("<=".equals(operator)) {
-//						operationMap.put(attribute, getNode(attribute, value, true));
-//					} 
 					else if ("!=".equals(operator)) {
 						operationMap.put("~" + attribute, value);
 					}
