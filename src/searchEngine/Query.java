@@ -23,4 +23,8 @@ public class Query {
     public String getValue() {
         return value;
     }
+
+    public String toString() {
+        return field + " " + operator + " " + value;
+    }
 }
