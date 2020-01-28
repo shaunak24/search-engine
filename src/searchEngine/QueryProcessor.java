@@ -1,6 +1,9 @@
 package searchEngine;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Stack;
 
@@ -15,7 +18,6 @@ public class QueryProcessor {
 
     public HashSet<String> processQuery(String query) {
 
-        HashSet<String> resultSet = new HashSet<>();
         Stack<String> operator = new Stack<>();
         Stack<HashSet<String>> operand = new Stack<>();
         
@@ -42,11 +44,112 @@ public class QueryProcessor {
                 operator.push(token); 
             }
             else {
-                StringBuilder subQuery = new StringBuilder(token);
+                StringBuilder subQuery = new StringBuilder();
+                int spaces = 0;
+                for (int index = i; index < query.length(); index++) {
+                    if (' ' == query.charAt(index)) {
+                        spaces++;
+                    }
+                    if (spaces == 3 || ')' == query.charAt(index)) {
+                        i = index - 1;
+                        break;
+                    }
+                    subQuery.append(query.charAt(index));
+                }
+                String[] queryTokens = subQuery.toString().trim().split(" ");
+                operand.push(executeQuery(new Query(queryTokens[0], queryTokens[1], queryTokens[2])));
             }
         }
 
-        return resultSet;
+        while (!operator.empty()) {
+            operand.push(applyOperator(operator.pop(), operand.pop(), operand.pop())); 
+        }
+
+        return operand.pop();
+    }
+
+    private HashSet<String> executeQuery(Query query) {
+
+        switch (query.getOperator()) {
+            case "=":
+                return equalTo(query.getAttribute(), query.getValue());
+            case ">":
+                return greaterThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef());
+            case "<":
+                return lessThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef());
+            case ">=":
+                return applyOperator("and", equalTo(query.getAttribute(), query.getValue()),
+                    greaterThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef()));
+            case "<=":
+                return applyOperator("and", equalTo(query.getAttribute(), query.getValue()),
+                    lessThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef()));
+            case "!=":
+                break;
+        }
+
+        return null;
+    }
+
+    private HashSet<String> lessThan(String attribute, TreeNode nodeRef) {
+        
+        String nodeValue = nodeRef.getData();
+		HashSet<String> tempResultSet = new HashSet<String>();
+		TreeNode rootNode = attributeMap.get(attribute).getNodeRef();
+
+		while (rootNode != null) {
+			if (rootNode.getData().compareTo(nodeValue) > 0) {
+				tempResultSet.add(rootNode.getData());
+				tempResultSet.addAll(getNodesFromTree(rootNode.right));
+				rootNode = rootNode.left;
+			} else {
+				rootNode = rootNode.right;
+			}
+		}
+		return tempResultSet;
+    }
+
+    private HashSet<String> greaterThan(String attribute, TreeNode nodeRef) {
+
+        String nodeValue = nodeRef.getData();
+		HashSet<String> tempResultSet = new HashSet<String>();
+		TreeNode rootNode = attributeMap.get(attribute).getNodeRef();
+
+		while (rootNode != null) {
+			if (rootNode.getData().compareTo(nodeValue) < 0) {
+				tempResultSet.add(rootNode.getData());
+				tempResultSet.addAll(getNodesFromTree(rootNode.left));
+				rootNode = rootNode.right;
+			} else {
+				rootNode = rootNode.left;
+			}
+		}
+		return tempResultSet;
+    }
+
+    private HashSet<String> getNodesFromTree(TreeNode newNode) {
+		HashSet<String> tempResultSet = new HashSet<String>();
+		Stack<TreeNode> nodeStack = new Stack<TreeNode>();
+		while (!nodeStack.isEmpty() || newNode != null) {
+			if (newNode != null) {
+				nodeStack.push(newNode);
+				newNode = newNode.left;
+			} else {
+				newNode = nodeStack.pop();
+				tempResultSet.add(newNode.getData());
+				newNode = newNode.right;
+
+			}
+		}
+		return tempResultSet;
+	}
+
+    private HashSet<String> equalTo(String attribute, String value) {
+
+        LinkedList linkedList = attributeMap.get(attribute).getAttributeMap().get(value);
+        HashSet<String> set = new HashSet<>();
+        set.addAll(linkedList);
+        
+        return set;
     }
 
     private HashSet<String> applyOperator(String operator, HashSet<String> set1, HashSet<String> set2) {

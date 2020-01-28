@@ -2,18 +2,18 @@ package searchEngine;
 
 public class Query {
 
-    private String field;
+    private String attribute;
     private String operator;
     private String value;
 
-    public Query(String field, String operator, String value) {
-        this.field = field;
+    public Query(String attribute, String operator, String value) {
+        this.attribute = attribute;
         this.operator = operator;
         this.value = value;
     }
 
-    public String getField() {
-        return field;
+    public String getAttribute() {
+        return attribute;
     }
 
     public String getOperator() {
@@ -25,6 +25,6 @@ public class Query {
     }
 
     public String toString() {
-        return field + " " + operator + " " + value;
+        return attribute + " " + operator + " " + value;
     }
 }

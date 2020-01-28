@@ -14,12 +14,14 @@ public class SearchEngine {
 		Preprocessor preprocessor = new Preprocessor(objectList, fieldList);
 		Map<String, Attribute> attributeObjectMap = preprocessor.getObjectMap();
 		
-		String query = "(name = A or (address = E or id > 4)) and (name = M or emailId = F)";
+        String query = "(name = A or (address = E or id > 4)) and (name = M or emailId = F)";
+        QueryProcessor queryProcessor = new QueryProcessor(attributeObjectMap);
+        HashSet<String> result = queryProcessor.processQuery(query);
 		// QueryParser parser = new QueryParser(attributeObjectMap);
 		// HashSet<String> result = parser.getResult(query);
 		
-		// for (String str : result) {
-		// 	System.out.println(preprocessor.getDataMap().get(str));
-		// }
+		for (String str : result) {
+			System.out.println(preprocessor.getDataMap().get(str));
+        }
 	}
 }
