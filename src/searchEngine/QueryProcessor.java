@@ -106,7 +106,7 @@ public class QueryProcessor {
                 return applyOperator("or", equalTo(query.getAttribute(), query.getValue()),
                     lessThan(query.getAttribute(), query.getValue()));
             case "!=":
-                break;
+                return equalTo("~" + query.getAttribute(), query.getValue());
         }
 
         return null;

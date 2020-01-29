@@ -15,7 +15,7 @@ public class SearchEngine {
 		Map<String, Attribute> attributeObjectMap = preprocessor.getObjectMap();
 		
         //String query = "(name = A or (address = E or id >= 4)) and (name = M or emailId = F)";
-        String query = "(name = A) or (address = E)";
+        String query = "(name = A) and (address != E)";
 
         QueryProcessor queryProcessor = new QueryProcessor(attributeObjectMap);
         HashSet<String> result = queryProcessor.processQuery(query);
