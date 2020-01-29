@@ -1,5 +1,7 @@
 package searchEngine;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,54 +20,74 @@ public class QueryProcessor {
 
     public HashSet<String> processQuery(String query) {
 
+        ArrayList<String> tokensList = getTokens(query);
+        System.out.println(tokensList);
         Stack<String> operator = new Stack<>();
         Stack<HashSet<String>> operand = new Stack<>();
         
-        for (int i = 0; i < query.length(); i++) {
+        for (int i = 0; i < tokensList.size(); i++) {
 
-            String token = String.valueOf(query.charAt(i));
-            if (" ".equals(token)) {
-                continue;
+            System.out.println(i + " " + tokensList.get(i));
+            
+            if ("(".equals(tokensList.get(i))) {
+                operator.push(tokensList.get(i));
             }
-            if ("(".equals(token)) {
-                operator.push(String.valueOf(token));
-            }
-            else if (")".equals(token)) {
-                while (operator.peek() != "(") {
+            else if (")".equals(tokensList.get(i))) {
+                while (!"(".equals(operator.peek())) {
                     operand.push(applyOperator(operator.pop(), operand.pop(), operand.pop()));
                 }
                 operator.pop();
             }
-            else if ("and".equals(token) || "or".equals(token)) {
+            else if ("and".equals(tokensList.get(i)) || "or".equals(tokensList.get(i))) {
 
-                while (!operator.empty() && hasPrecedence(token, operator.peek())) { 
+                while (!operator.empty() && hasPrecedence(tokensList.get(i), operator.peek())) { 
                   operand.push(applyOperator(operator.pop(), operand.pop(), operand.pop())); 
                 }
-                operator.push(token); 
+                operator.push(tokensList.get(i)); 
             }
             else {
-                StringBuilder subQuery = new StringBuilder();
-                int spaces = 0;
-                for (int index = i; index < query.length(); index++) {
-                    if (' ' == query.charAt(index)) {
-                        spaces++;
-                    }
-                    if (spaces == 3 || ')' == query.charAt(index)) {
-                        i = index - 1;
-                        break;
-                    }
-                    subQuery.append(query.charAt(index));
-                }
-                String[] queryTokens = subQuery.toString().trim().split(" ");
-                operand.push(executeQuery(new Query(queryTokens[0], queryTokens[1], queryTokens[2])));
+                operand.push(executeQuery(new Query(tokensList.get(i), tokensList.get(i + 1),
+                             tokensList.get(i + 2))));
+                i += 2;
             }
+            System.out.println("Operator Stack: " + operator);
+            System.out.println("Operand Stack: " + operand);
         }
 
         while (!operator.empty()) {
             operand.push(applyOperator(operator.pop(), operand.pop(), operand.pop())); 
         }
 
+        System.out.println("Final Result Set: " + operand.peek());
         return operand.pop();
+    }
+
+    private ArrayList<String> getTokens(String query) {
+        ArrayList<String> tokensList = new ArrayList<>();
+        StringBuilder temp = new StringBuilder();
+
+        for (char element : query.toCharArray()) {
+            if (' ' == element) {
+                tokensList.add(temp.toString());
+                temp = temp.delete(0, temp.length());
+                continue;
+            }
+            if ('(' == element || ')' == element) {
+                if (!"".equals(temp)) {
+                    tokensList.add(temp.toString());
+                    temp = temp.delete(0, temp.length());
+                }
+                tokensList.add(String.valueOf(element));
+                continue;
+            }
+            temp.append(element);
+        }
+        if (!"".equals(temp)) {
+            tokensList.add(temp.toString());
+        }
+
+        tokensList.removeAll(Arrays.asList(""));
+        return tokensList;
     }
 
     private HashSet<String> executeQuery(Query query) {
@@ -74,15 +96,15 @@ public class QueryProcessor {
             case "=":
                 return equalTo(query.getAttribute(), query.getValue());
             case ">":
-                return greaterThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef());
+                return greaterThan(query.getAttribute(), query.getValue());
             case "<":
-                return lessThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef());
+                return lessThan(query.getAttribute(), query.getValue());
             case ">=":
-                return applyOperator("and", equalTo(query.getAttribute(), query.getValue()),
-                    greaterThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef()));
+                return applyOperator("or", equalTo(query.getAttribute(), query.getValue()),
+                    greaterThan(query.getAttribute(), query.getValue()));
             case "<=":
-                return applyOperator("and", equalTo(query.getAttribute(), query.getValue()),
-                    lessThan(query.getAttribute(), attributeMap.get(query.getAttribute()).getNodeRef()));
+                return applyOperator("or", equalTo(query.getAttribute(), query.getValue()),
+                    lessThan(query.getAttribute(), query.getValue()));
             case "!=":
                 break;
         }
@@ -90,36 +112,35 @@ public class QueryProcessor {
         return null;
     }
 
-    private HashSet<String> lessThan(String attribute, TreeNode nodeRef) {
+    private HashSet<String> lessThan(String attribute, String value) {
         
-        String nodeValue = nodeRef.getData();
 		HashSet<String> tempResultSet = new HashSet<String>();
-		TreeNode rootNode = attributeMap.get(attribute).getNodeRef();
+        TreeNode rootNode = attributeMap.get(attribute).getNodeRef();
+        System.out.println("RootNode: " + rootNode.getData());
 
 		while (rootNode != null) {
-			if (rootNode.getData().compareTo(nodeValue) > 0) {
-				tempResultSet.add(rootNode.getData());
-				tempResultSet.addAll(getNodesFromTree(rootNode.right));
+			if (rootNode.getData().compareTo(value) >= 0) {
 				rootNode = rootNode.left;
 			} else {
+                tempResultSet.add(rootNode.getData());
+				tempResultSet.addAll(getNodesFromTree(rootNode.left));
 				rootNode = rootNode.right;
 			}
 		}
 		return tempResultSet;
     }
 
-    private HashSet<String> greaterThan(String attribute, TreeNode nodeRef) {
+    private HashSet<String> greaterThan(String attribute, String value) {
 
-        String nodeValue = nodeRef.getData();
 		HashSet<String> tempResultSet = new HashSet<String>();
-		TreeNode rootNode = attributeMap.get(attribute).getNodeRef();
+        TreeNode rootNode = attributeMap.get(attribute).getNodeRef();
 
 		while (rootNode != null) {
-			if (rootNode.getData().compareTo(nodeValue) < 0) {
-				tempResultSet.add(rootNode.getData());
-				tempResultSet.addAll(getNodesFromTree(rootNode.left));
+			if (rootNode.getData().compareTo(value) <= 0) {
 				rootNode = rootNode.right;
 			} else {
+                tempResultSet.add(rootNode.getData());
+				tempResultSet.addAll(getNodesFromTree(rootNode.right));
 				rootNode = rootNode.left;
 			}
 		}
@@ -166,7 +187,7 @@ public class QueryProcessor {
 
     private boolean hasPrecedence(String op1, String op2) {
 
-        if (op2 == "(" || op2 == ")") 
+        if ("(".equals(op2) || ")".equals(op2)) 
             return false; 
         else
             return true; 
