@@ -16,7 +16,7 @@ public class SearchEngine {
 		
         //String query = "(name = A or (address = E or id >= 4)) and (name = M or emailId = F)";
         //String query = "((name = A) and (address != E)) or (id <= 3)";
-        String query = "((name = M or address = E) and id != 6)";
+        String query = "((name = M or address = E) and (id != 6 and emailId = L))";
 
         QueryProcessor queryProcessor = new QueryProcessor(attributeObjectMap);
         HashSet<String> result = queryProcessor.processQuery(query);

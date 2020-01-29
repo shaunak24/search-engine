@@ -7,12 +7,12 @@ public class DataSource {
 	
 	public static List<Person> getPersonData() {
 		List<Person> list = new ArrayList<>();
-		list.add(new Person("1", "A", "E", "C"));
-		list.add(new Person("2", "D", "E", "F"));
+		list.add(new Person("1", "A", "E", "L"));
+		list.add(new Person("2", "D", "E", "L"));
 		list.add(new Person("3", "G", "H", "I"));
-		list.add(new Person("4", "J", "K", "L"));
+		list.add(new Person("4", "J", "K", "N"));
 		list.add(new Person("5", "M", "N", "O"));
-		list.add(new Person("6", "M", "Q", "R"));
+		list.add(new Person("6", "M", "Q", "L"));
 		return list;
 	}
 	
