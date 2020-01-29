@@ -27,9 +27,9 @@ public class Attribute {
 		this.attributeMap = getAttributeMap();
 	}
 
-	public TreeNode buildAttributeTree(List list) {
+	public TreeNode buildAttributeTree(List<Adapter> list) {
 
-		List<String> keyList = new ArrayList<>(attributeMap.keySet());
+        List<String> keyList = new ArrayList<>(attributeMap.keySet());
 		Collections.sort(keyList);
 		return sortedListToTree(keyList, 0, keyList.size() - 1);
 	}

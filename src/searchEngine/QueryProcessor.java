@@ -58,6 +58,7 @@ public class QueryProcessor {
             operand.push(applyOperator(operator.pop(), operand.pop(), operand.pop())); 
         }
 
+        System.out.println("####################################################################");
         System.out.println("Final Result Set: " + operand.peek());
         return operand.pop();
     }
